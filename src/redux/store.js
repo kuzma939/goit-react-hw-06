@@ -1,25 +1,43 @@
 import { configureStore } from '@reduxjs/toolkit'
-import { persistStore, persistReducer } from 'redux-persist'
-import storage from 'redux-persist/lib/storage'
+import { combineReducers } from 'redux'
+import {
+  persistStore,
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from 'redux-persist'
+import storage from 'redux-persist/lib/storage' // вибір стандартного локального сховища
 import contactsReducer from './contactsSlice'
 import filtersReducer from './filtersSlice'
 //Налаштування для збереження даних у локальному сховищі (localStorage).
+// Налаштування persist конфігурації
 const persistConfig = {
-  key: 'contacts',
+  key: 'root',
   storage,
-  whitelist: ['items'],
+  whitelist: ['contacts'], // вказуємо, що хочемо зберігати
 }
-//Редюсер контактів з підтримкою збереження стану.
-// Застосування конфігурації до редюсера слайса контактів
-const persistedContactsReducer = persistReducer(persistConfig, contactsReducer)
-
-// Створення стору.Основний store, який об'єднує редюсери контактів та фільтрів.
-export const store = configureStore({
-  reducer: {
-    contacts: persistedContactsReducer,
-    filters: filtersReducer,
-  },
+// Створення стору.Основний store, який об'єднує редюсери контактів та фільтрів
+const rootReducer = combineReducers({
+  contacts: contactsReducer,
+  filters: filtersReducer,
 })
+// Застосування конфігурації до редюсера слайса контактів
+const persistedReducer = persistReducer(persistConfig, rootReducer)
 
+// Налаштування store з підтримкою redux-persist
+const store = configureStore({
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
+})
 // Створення persistor для PersistGate.Об'єкт, який керує збереженням стану в localStorage.
 export const persistor = persistStore(store)
+export default store

@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 import { deleteContact } from '../../redux/contactsSlice'
 import styles from './Contact.module.css'
 
-const Contact = ({ contact }) => {
+const Contact = ({contact}) => {
   const dispatch = useDispatch()
 
   const handleDelete = () => {

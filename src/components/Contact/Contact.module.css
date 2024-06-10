@@ -3,7 +3,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 10px;
-    background-color: blue;
+    background-color: rgb(47, 0, 255);
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin-bottom: 10px;
@@ -11,14 +11,14 @@
   
   .contact p {
     margin: 0;
-    color: #333;
+    color: white;
   }
   
   button {
     padding: 5px 10px;
     font-size: 14px;
-    background-color: #dc3545;
-    color: white;
+    background-color: #8bdc35;
+    color: grey;
     border: none;
     border-radius: 4px;
     cursor: pointer;
